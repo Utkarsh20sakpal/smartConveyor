@@ -1,12 +1,21 @@
 import time
+import logging
 
 from .model import load_model
 
+logger = logging.getLogger("shield-vision")
+
 
 def predict_image(image):
+    logger.info("[Inference] Starting prediction")
+
+    logger.info("[Inference] Loading YOLO model")
     model = load_model()
+    logger.info("[Inference] YOLO model loaded")
 
     start_time = time.perf_counter()
+
+    logger.info("[Inference] Calling model.predict()")
 
     results = model.predict(
         source=image,
@@ -14,9 +23,16 @@ def predict_image(image):
         verbose=False,
     )
 
+    logger.info("[Inference] model.predict() completed")
+
     inference_ms = round(
         (time.perf_counter() - start_time) * 1000,
         2,
+    )
+
+    logger.info(
+        "[Inference] Prediction completed in %.2f ms",
+        inference_ms,
     )
 
     result = results[0]
@@ -46,6 +62,11 @@ def predict_image(image):
         )
 
     height, width = result.orig_shape
+
+    logger.info(
+        "[Inference] Returning %d detections",
+        len(detections),
+    )
 
     return {
         "success": True,
