@@ -13,8 +13,9 @@ import 'dotenv/config';
 import axios from 'axios';
 import FormData from 'form-data';
 
-const VISION_SERVICE_URL =
-  process.env.VISION_SERVICE_URL || 'http://127.0.0.1:8000';
+const VISION_SERVICE_URL = (
+  process.env.VISION_SERVICE_URL || 'http://127.0.0.1:8000'
+).replace(/\/+$/, '');
 
 console.log(
   "[DetectionController] VISION_SERVICE_URL:",
