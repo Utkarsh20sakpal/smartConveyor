@@ -1,23 +1,26 @@
 from pathlib import Path
-from ultralytics import YOLO
 
+import onnxruntime as ort
 
-MODEL_PATH = Path(__file__).resolve().parent.parent / "models" / "best.pt"
+MODEL_PATH = Path(__file__).resolve().parent.parent / "models" / "best.onnx"
 
-model = None
+session = None
 
 
 def load_model():
-    global model
+    global session
 
-    if model is not None:
-        return model
+    if session is not None:
+        return session
 
     if not MODEL_PATH.exists():
         raise FileNotFoundError(
-            f"YOLO model not found: {MODEL_PATH}"
+            f"ONNX model not found: {MODEL_PATH}"
         )
 
-    model = YOLO(str(MODEL_PATH))
+    session = ort.InferenceSession(
+        str(MODEL_PATH),
+        providers=["CPUExecutionProvider"],
+    )
 
-    return model
+    return session
