@@ -13,8 +13,9 @@ dotenv.config();
 
 const app = express();
 
+const frontendOrigin = process.env.FRONTEND_URL;
 app.use(cors({ 
-  origin: 'http://localhost:5173',
+  origin: frontendOrigin ? [frontendOrigin, 'http://localhost:5173', 'http://127.0.0.1:5173'] : '*',
   exposedHeaders: ['Content-Disposition'] 
 }));
 app.use(express.json({ limit: '10mb' })); // base64 images can be large
