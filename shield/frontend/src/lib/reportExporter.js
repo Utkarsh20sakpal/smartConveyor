@@ -7,7 +7,8 @@
  * Endpoint: POST /api/reports/generate
  */
 
-const API_BASE = import.meta.env.VITE_API_URL ?? '';
+const rawApiBase = import.meta.env.VITE_API_URL ?? import.meta.env.VITE_BACKEND_URL ?? '';
+const API_BASE = String(rawApiBase).replace(/\/+$/, '');
 
 /**
  * Calls the backend to generate and download a report file.

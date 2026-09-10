@@ -13,11 +13,27 @@ dotenv.config();
 
 const app = express();
 
-const frontendOrigin = process.env.FRONTEND_URL;
+// Normalize duplicate slashes in URLs (e.g. //api/... -> /api/...)
+app.use((req, _res, next) => {
+  if (req.url && req.url.startsWith('//')) {
+    req.url = req.url.replace(/^\/+/, '/');
+  }
+  next();
+});
+
+// Bulletproof CORS: dynamically permit any origin (Render, localhost, custom domains)
 app.use(cors({ 
-  origin: frontendOrigin ? [frontendOrigin, 'http://localhost:5173', 'http://127.0.0.1:5173'] : '*',
+  origin: (origin, callback) => {
+    callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
   exposedHeaders: ['Content-Disposition'] 
 }));
+
+// Explicit preflight handler for all routes
+app.options('*', cors());
 app.use(express.json({ limit: '10mb' })); // base64 images can be large
 app.use(express.urlencoded({ extended: true }));
 

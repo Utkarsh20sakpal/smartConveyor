@@ -76,9 +76,10 @@ const STALE_AFTER_MS = 60 * 1000;
  * (or the configured VITE_BACKEND_URL).  In production this should point
  * to the actual deployed backend.
  */
-const BACKEND_URL =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_BACKEND_URL) ||
+const rawBackendUrl =
+  (typeof import.meta !== "undefined" && (import.meta.env?.VITE_BACKEND_URL || import.meta.env?.VITE_API_URL)) ||
   "http://localhost:3001";
+const BACKEND_URL = String(rawBackendUrl).replace(/\/+$/, "");
 
 
 // ================================================================
