@@ -12,13 +12,12 @@ CONF_THRESHOLD = 0.25
 IOU_THRESHOLD = 0.45
 
 CLASS_NAMES = {
-    0: "0",
-    1: "1",
-    2: "2",
-    3: "3",
-    4: "4",
+    0: "Lubang Besar",
+    1: "Lubang Kecil",
+    2: "Sambungan Belt",
+    3: "Sobekan Besar",
+    4: "Sobekan Kecil",
 }
-
 
 def calculate_iou(box, boxes):
     x1 = np.maximum(box[0], boxes[:, 0])
