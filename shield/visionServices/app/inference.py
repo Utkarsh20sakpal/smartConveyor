@@ -18,11 +18,11 @@ def predict_image(image):
     logger.info("[Inference] Calling model.predict()")
 
     results = model.predict(
-        source=image,
-        conf=0.25,
-        verbose=False,
-    )
-
+    source=image,
+    conf=0.25,
+    imgsz=320,
+    verbose=False,
+)
     logger.info("[Inference] model.predict() completed")
 
     inference_ms = round(
